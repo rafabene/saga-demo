@@ -1,0 +1,40 @@
+{
+  "name": "order",
+  "version": "1.0.0",
+  "description": "Order Microservice",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon",
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafabene/saga-demo.git"
+  },
+  "keywords": [
+    "saga"
+  ],
+  "author": "Rafael Benevides",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rafabene/saga-demo/issues"
+  },
+  "homepage": "https://github.com/rafabene/saga-demo#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "kafka-node": "^5.0.0",
+    "knex": "^0.21.1",
+    "mysql2": "^2.1.0",
+    "tarn": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.3.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "nodemon": "^2.0.4"
+  }
+}

@@ -1,0 +1,11 @@
+server:
+    port: 8081
+javax:
+    sql:
+        DataSource:
+            balanceDataSource:
+                dataSourceClassName: com.mysql.cj.jdbc.MysqlDataSource
+                dataSource:
+                    url: jdbc:mysql://localhost:3306/sagademo
+                    user: myuser
+                    password: mypassword

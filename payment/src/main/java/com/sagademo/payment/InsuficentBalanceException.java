@@ -6,7 +6,7 @@ public class InsuficentBalanceException extends Exception {
 
     public InsuficentBalanceException(Double balance, double value) {
         super(String.format(
-            "Account has a balance of %d, but it tried to with withdraw %d", 
+            "Account has a balance of %.2f, but it tried to with withdraw %.2f", 
             balance, value));
 	}
 

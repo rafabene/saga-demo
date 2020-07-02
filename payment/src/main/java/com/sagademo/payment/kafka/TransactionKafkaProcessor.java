@@ -13,6 +13,7 @@ import com.sagademo.payment.TransactionResult.ResultType;
 import com.sagademo.payment.entity.InsuficentBalanceException;
 import com.sagademo.payment.TransactionService;
 
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -38,15 +39,14 @@ public class TransactionKafkaProcessor implements Runnable {
 
     public TransactionKafkaProcessor(final String kafkaURL, TransactionService transactionService) {
         this.transactionService = transactionService;
+        properties.put(CommonClientConfigs.GROUP_ID_CONFIG, "payment");
+        properties.put(CommonClientConfigs.CLIENT_ID_CONFIG, "payment-request");
+        properties.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, kafkaURL);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, TransactionResultSerializer.class);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, TransactionDeserializer.class);
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "payment");
-        properties.put(ConsumerConfig.CLIENT_ID_CONFIG, "payment");
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaURL);
         consumer = new KafkaConsumer<>(properties);
         producer = new KafkaProducer<>(properties);
     }

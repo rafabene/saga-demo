@@ -1,4 +1,4 @@
-package com.sagademo.payment;
+package com.sagademo.payment.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

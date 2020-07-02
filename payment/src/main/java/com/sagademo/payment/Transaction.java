@@ -4,11 +4,23 @@ import javax.json.bind.annotation.JsonbProperty;
 
 public class Transaction {
 
+    @JsonbProperty(value = "account", nillable = true)
+    private Integer account_id;
+
     @JsonbProperty("type")
     private TransactionType transactionType;
 
     @JsonbProperty("value")
     private Double value;
+
+
+    public Integer getAccount() {
+        return account_id;
+    }
+
+    public void setAccount(Integer account_id) {
+        this.account_id = account_id;
+    }
 
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
@@ -28,8 +40,13 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return String.format("Transaction (%s, %d)", 
-                this.transactionType, this.value);
+        return String.format("Transaction (%d, %s, %.2f)", 
+                this.account_id, this.transactionType, this.value);
+    }
+
+    public static enum TransactionType {
+        WITHDRAW,
+        DEPOSIT
     }
     
 }

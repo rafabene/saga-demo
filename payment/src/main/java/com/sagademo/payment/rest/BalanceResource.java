@@ -1,8 +1,9 @@
-package com.sagademo.payment;
+package com.sagademo.payment.rest;
 
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -18,22 +19,29 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.sagademo.payment.Transaction;
+import com.sagademo.payment.TransactionService;
+import com.sagademo.payment.entity.Balance;
+import com.sagademo.payment.entity.BalanceRepository;
+import com.sagademo.payment.entity.InsuficentBalanceException;
+
 @Path("/payment")
 @ApplicationScoped
 public class BalanceResource {
 
-    @PersistenceContext
-    private EntityManager em;
+   @Inject
+   private BalanceRepository balanceRepository;
+
+   @Inject
+   private TransactionService transactionService;
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{account}")
     public Response getBalance(@PathParam("account") Integer account){
         try {
-            Balance balance = em.createQuery("FROM Balance b WHERE b.account_id = :id", 
-            Balance.class)
-            .setParameter("id", account)
-            .getSingleResult();
+            Balance balance = balanceRepository.getBalanceByAccount(account);
             return Response.ok(balance).build();
         } catch (NoResultException e) {
             return Response.status(Status.NOT_FOUND)
@@ -50,19 +58,7 @@ public class BalanceResource {
     @Transactional
     public Response transaction(@PathParam("account") Integer account, Transaction transaction){
         try {
-            Balance balance = em.createQuery("FROM Balance b WHERE b.account_id = :id", 
-            Balance.class)
-            .setParameter("id", account)
-            .getSingleResult();
-            switch(transaction.getTransactionType()){
-                case DEPOSIT:
-                    balance.deposit(transaction.getValue());
-                    break;
-                case WITHDRAW:
-                    balance.withdraw(transaction.getValue());
-                    break;
-            }
-            em.persist(balance);
+            Balance balance = transactionService.processTransaction(account, transaction);
             return Response.ok(balance).build();
         } catch (NoResultException e) {
             return Response.status(Status.NOT_FOUND)

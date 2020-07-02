@@ -12,6 +12,7 @@
             <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
             <property name="javax.persistence.schema-generation.drop-source" value="metadata"/>
             <property name="javax.persistence.sql-load-script-source" value="import.sql"/>
+            <property name="eclipselink.logging.level" value="FINE" />
             <property name="eclipselink.deploy-on-startup" value="true"/>
             <property name="eclipselink.jdbc.native-sql" value="true"/>
             <property name="eclipselink.logging.logger" value="JavaLogger"/>

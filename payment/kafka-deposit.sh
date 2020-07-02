@@ -1,0 +1,1 @@
+docker-compose -f ../docker-compose.yaml exec kafka  bash -c "echo '{\"account\": 1, \"type\": \"DEPOSIT\", \"value\": 10.5}' | kafka-console-producer --bootstrap-server localhost:9092 --topic payment_request"

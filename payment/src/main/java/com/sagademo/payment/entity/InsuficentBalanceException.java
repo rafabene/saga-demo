@@ -1,4 +1,4 @@
-package com.sagademo.payment;
+package com.sagademo.payment.entity;
 
 public class InsuficentBalanceException extends Exception {
 

@@ -1,4 +1,4 @@
-package com.sagademo.payment;
+package com.sagademo.payment.rest;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.MediaType;
@@ -8,7 +8,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class EnumExceptionMapper implements ExceptionMapper<ProcessingException> {
+public class ProcessingExceptionMapper implements ExceptionMapper<ProcessingException> {
 
     @Override
     public Response toResponse(ProcessingException exception) {

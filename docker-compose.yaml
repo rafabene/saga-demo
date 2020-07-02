@@ -50,3 +50,16 @@ services:
             - DB_PASSWORD=mypassword
             - KAFKA_URL=kafka:9092
         command: ./wait-for-it.sh -t 0 mysql:3306 -- npm start
+    payment:
+        build:
+            context: "payment"
+        depends_on: 
+            - kafka
+            - mysql
+        ports: 
+            - "8081:8081"
+        environment: 
+            - JAVAX_SQL_DATASOURCE_BALANCEDATASOURCE_DATASOURCE_URL=jdbc:mysql://mysql:3306/sagademo
+            - JAVAX_SQL_DATASOURCE_BALANCEDATASOURCE_DATASOURCE_USER=myuser
+            - JAVAX_SQL_DATASOURCE_BALANCEDATASOURCE_DATASOURCE_PASSWORD=mypassword
+            - KAFKA_URL=kafka:9092

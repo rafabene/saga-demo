@@ -33,6 +33,8 @@ public class TransactionKafkaProcessor implements Runnable {
     private Properties properties = new Properties();
     private TransactionService transactionService;
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Consumer<String, Transaction> consumer;
+    private Producer<String, TransactionResult> producer;
 
     public TransactionKafkaProcessor(final String kafkaURL, TransactionService transactionService) {
         this.transactionService = transactionService;
@@ -45,12 +47,12 @@ public class TransactionKafkaProcessor implements Runnable {
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaURL);
+        consumer = new KafkaConsumer<>(properties);
+        producer = new KafkaProducer<>(properties);
     }
 
     @Override
     public void run() {
-        Consumer<String, Transaction> consumer = new KafkaConsumer<>(properties);
-        Producer<String, TransactionResult> producer = new KafkaProducer<>(properties);
         consumer.subscribe(Collections.singletonList(PAYMENT_REQUEST_TOPIC));
         try {
             while (true) {
@@ -59,7 +61,7 @@ public class TransactionKafkaProcessor implements Runnable {
                     Transaction transaction = record.value();
                     // Check if transaction came from the Deserializer
                     if (transaction != null) {
-                        processRequestTransaction(transaction, producer);
+                        processTransaction(transaction);
                     }
                 }
             }
@@ -75,10 +77,11 @@ public class TransactionKafkaProcessor implements Runnable {
      * @param transaction Requested transaction
      * @param producer Kafka Producer that will be used to send the result of this transaction
      */
-    private void processRequestTransaction(Transaction transaction, Producer<String, TransactionResult> producer) {
+    private void processTransaction(Transaction transaction) {
         TransactionResult transactionResult = null;
         try {
-            transactionService.processTransaction(transaction.getAccount(), transaction);
+            Integer accountId = transaction.getAccount();
+            transactionService.processTransaction(accountId, transaction);
             transactionResult = new TransactionResult(transaction.getAccount(),
                     transaction.getValue(), ResultType.APPROVED, null);
         } catch (NoResultException e) {
@@ -89,10 +92,11 @@ public class TransactionKafkaProcessor implements Runnable {
             transactionResult = new TransactionResult(transaction.getAccount(),
                     transaction.getValue(), ResultType.DENIED, e.getMessage());
         }finally{
-            ProducerRecord<String, TransactionResult> producerRecord =
+            if (transactionResult != null) {
+                ProducerRecord<String, TransactionResult> producerRecord =
                 new ProducerRecord<>(PAYMENT_RESPONSE_TOPIC, transactionResult);
-            // Produce the result for the transaction    
-            producer.send(producerRecord);
+                producer.send(producerRecord);
+            }
         }
     }
 

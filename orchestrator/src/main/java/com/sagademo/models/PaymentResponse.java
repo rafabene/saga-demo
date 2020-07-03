@@ -1,24 +1,24 @@
-package com.sagademo.payment;
+package com.sagademo.models;
 
-import javax.json.bind.annotation.JsonbProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TransactionResult {
+public class PaymentResponse {
 
-    @JsonbProperty(value = "accountId", nillable = true)
+    @JsonProperty(value = "accountId")
     private Integer account_id;
 
     private Double requestedValue;
 
     private ResultType resultType;
 
-    @JsonbProperty(nillable = true)
+    @JsonProperty(required = false)
     private String cause;
 
 
-    public TransactionResult() {
+    public PaymentResponse() {
     }
 
-    public TransactionResult(Integer account_id, Double requestedValue, ResultType resultType, String cause) {
+    public PaymentResponse(Integer account_id, Double requestedValue, ResultType resultType, String cause) {
         this.account_id = account_id;
         this.requestedValue = requestedValue;
         this.resultType = resultType;

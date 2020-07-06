@@ -1,22 +1,20 @@
 package com.sagademo.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class OrderRequest {
 
-    private Long order;
+    private Long id;
 
     private OrderStatus status;
 
     public OrderRequest() {
     }
 
-    public Long getOrder() {
-        return order;
+    public Long getId() {
+        return id;
     }
 
-    public void setOrder(Long order) {
-        this.order = order;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public OrderStatus getStatus() {
@@ -29,7 +27,7 @@ public class OrderRequest {
 
     @Override
     public String toString() {
-        return "{" + " order='" + getOrder() + "'" + ", status='" + getStatus() + "'" + "}";
+        return "{" + " order='" + getId() + "'" + ", status='" + getStatus() + "'" + "}";
     }
 
     public static enum OrderStatus {

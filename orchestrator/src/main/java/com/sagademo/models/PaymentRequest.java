@@ -7,6 +7,8 @@ public class PaymentRequest {
     @JsonProperty(value = "account")
     private Integer account_id;
 
+    private String transactionIdentifier;
+
     @JsonProperty("type")
     private TransactionType transactionType;
 
@@ -17,8 +19,9 @@ public class PaymentRequest {
     public PaymentRequest() {
     }
 
-    public PaymentRequest(Integer account_id, TransactionType transactionType, Double value) {
+    public PaymentRequest(Integer account_id, String transactionIdentifier, TransactionType transactionType, Double value) {
         this.account_id = account_id;
+        this.transactionIdentifier = transactionIdentifier;
         this.transactionType = transactionType;
         this.value = value;
     }
@@ -29,6 +32,14 @@ public class PaymentRequest {
 
     public void setAccount(Integer account_id) {
         this.account_id = account_id;
+    }
+
+    public String getTransactionIdentifier() {
+        return transactionIdentifier;
+    }
+
+    public void setTransactionIdentifier(String transactionIdentifier) {
+        this.transactionIdentifier = transactionIdentifier;
     }
 
     public void setTransactionType(TransactionType transactionType) {
@@ -47,11 +58,17 @@ public class PaymentRequest {
         return value;
     }
 
+
     @Override
     public String toString() {
-        return String.format("Transaction (%d, %s, %.2f)", 
-                this.account_id, this.transactionType, this.value);
+        return "{" +
+            " account_id='" + getAccount() + "'" +
+            ", transactionIdentifier='" + getTransactionIdentifier() + "'" +
+            ", transactionType='" + getTransactionType() + "'" +
+            ", value='" + getValue() + "'" +
+            "}";
     }
+
 
     public static enum TransactionType {
         WITHDRAW,

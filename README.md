@@ -1,6 +1,6 @@
 # Saga Demo
 
-To Execute this project, close the repository, `cd` to it, and execute:
+To Execute this project, clone the repository, `cd` into it, and execute:
 
     docker-compose up
 

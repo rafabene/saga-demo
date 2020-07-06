@@ -7,6 +7,8 @@ public class Transaction {
     @JsonbProperty(value = "account", nillable = true)
     private Integer account_id;
 
+    private String transactionIdentifier;
+
     @JsonbProperty("type")
     private TransactionType transactionType;
 
@@ -20,6 +22,14 @@ public class Transaction {
 
     public void setAccount(Integer account_id) {
         this.account_id = account_id;
+    }
+
+    public void setTransactionIdentifier(String transactionIdentifier) {
+        this.transactionIdentifier = transactionIdentifier;
+    }
+
+    public String getTransactionIdentifier() {
+        return transactionIdentifier;
     }
 
     public void setTransactionType(TransactionType transactionType) {

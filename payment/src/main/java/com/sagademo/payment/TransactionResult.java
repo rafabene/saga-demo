@@ -7,6 +7,8 @@ public class TransactionResult {
     @JsonbProperty(value = "accountId", nillable = true)
     private Integer account_id;
 
+    private String transactionIdentifier;
+
     private Double requestedValue;
 
     private ResultType resultType;
@@ -18,8 +20,9 @@ public class TransactionResult {
     public TransactionResult() {
     }
 
-    public TransactionResult(Integer account_id, Double requestedValue, ResultType resultType, String cause) {
+    public TransactionResult(Integer account_id, String transactionIdentifier, Double requestedValue, ResultType resultType, String cause) {
         this.account_id = account_id;
+        this.transactionIdentifier = transactionIdentifier;
         this.requestedValue = requestedValue;
         this.resultType = resultType;
         this.cause = cause;
@@ -31,6 +34,14 @@ public class TransactionResult {
 
     public void setAccount_id(Integer account_id) {
         this.account_id = account_id;
+    }
+
+    public String getTransactionIdentifier() {
+        return transactionIdentifier;
+    }
+
+    public void setTransactionIdentifier(String transactionIdentifier) {
+        this.transactionIdentifier = transactionIdentifier;
     }
 
     public Double getRequestedValue() {

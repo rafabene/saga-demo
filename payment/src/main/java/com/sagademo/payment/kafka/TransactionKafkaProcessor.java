@@ -75,26 +75,26 @@ public class TransactionKafkaProcessor implements Runnable {
     /**
      * 
      * @param transaction Requested transaction
-     * @param producer Kafka Producer that will be used to send the result of this transaction
+     * @param producer    Kafka Producer that will be used to send the result of
+     *                    this transaction
      */
     private void processTransaction(Transaction transaction) {
         TransactionResult transactionResult = null;
         try {
             Integer accountId = transaction.getAccount();
             transactionService.processTransaction(accountId, transaction);
-            transactionResult = new TransactionResult(transaction.getAccount(),
+            transactionResult = new TransactionResult(transaction.getAccount(), transaction.getTransactionIdentifier(),
                     transaction.getValue(), ResultType.APPROVED, null);
         } catch (NoResultException e) {
-            transactionResult = new TransactionResult(transaction.getAccount(),
-                    transaction.getValue(), ResultType.DENIED,
-                    "No Balance for account " + transaction.getAccount());
+            transactionResult = new TransactionResult(transaction.getAccount(), transaction.getTransactionIdentifier(),
+                    transaction.getValue(), ResultType.DENIED, "No Balance for account " + transaction.getAccount());
         } catch (InsuficentBalanceException e) {
-            transactionResult = new TransactionResult(transaction.getAccount(),
+            transactionResult = new TransactionResult(transaction.getAccount(), transaction.getTransactionIdentifier(),
                     transaction.getValue(), ResultType.DENIED, e.getMessage());
-        }finally{
+        } finally {
             if (transactionResult != null) {
-                ProducerRecord<String, TransactionResult> producerRecord =
-                new ProducerRecord<>(PAYMENT_RESPONSE_TOPIC, transactionResult);
+                ProducerRecord<String, TransactionResult> producerRecord = new ProducerRecord<>(PAYMENT_RESPONSE_TOPIC,
+                        transactionResult);
                 producer.send(producerRecord);
             }
         }

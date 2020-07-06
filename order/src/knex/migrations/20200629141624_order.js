@@ -4,6 +4,7 @@ exports.up = function (knex) {
     .createTable('order', table => {
       table.increments('id')
       table.string('status', 20).notNullable()
+      table.string('canceledCause', 100).nullable()
     })
 }
 

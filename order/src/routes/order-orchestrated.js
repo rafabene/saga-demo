@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
 router.put('/:id', (req, res) => {
   if (req.body.status !== 'CANCEL' && req.body.status !== 'CONFIRM') {
     res.status(400).send('Only \'CANCEL\' and \'CONFIRM\' can be informed as status')
+  } else if (req.body.status === 'CANCEL' && typeof req.body.cause === 'undefined') {
+    res.status(400).send('You need to inform a cause to cancel an Order')
   } else {
     // Valid parameters
     knex('order')
@@ -26,11 +28,12 @@ router.put('/:id', (req, res) => {
           const newStatus = req.body.status + 'ED'
           knex('order').where('id', req.params.id)
             .update('status', newStatus)
+            .update('canceledCause', req.body.cause)
             .then((id) => {
-              res.send(JSON.stringify({ id: id, status: newStatus }))
+              res.send(JSON.stringify({ id: order[0].id, status: newStatus }))
             })
         } else {
-          res.status(400).send(`Order ${order[0].id} has status ${order[0].status}`)
+          res.status(400).send(`Order ${order[0].id} can not be updated. It already has status ${order[0].status}`)
         }
       })
   }

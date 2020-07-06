@@ -21,6 +21,7 @@ consumer.on('message', function (message) {
   const order = JSON.parse(message.value)
   knex('order').where('id', order.id)
     .update('status', order.status)
+    .update('canceledCause', order.cause)
     .catch(err => {
       console.log(err)
     })

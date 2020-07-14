@@ -1,12 +1,12 @@
 package com.sagademo.models;
 
-public class OrderRequest {
+public class OrderCreatedEvent {
 
     private Long id;
 
     private OrderStatus status;
 
-    public OrderRequest() {
+    public OrderCreatedEvent() {
     }
 
     public Long getId() {

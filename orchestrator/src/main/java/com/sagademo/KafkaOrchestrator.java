@@ -7,12 +7,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
-import com.sagademo.models.OrderRequest;
+import com.sagademo.models.OrderCreatedEvent;
 import com.sagademo.models.OrderResponse;
 import com.sagademo.models.OrderResponse.OrderStatus;
 import com.sagademo.models.PaymentRequest;
 import com.sagademo.models.PaymentRequest.TransactionType;
 import com.sagademo.models.PaymentResponse;
+import com.sagademo.models.ReservationCommand;
 import com.sagademo.serdes.SerdesFactory;
 
 import org.apache.kafka.clients.admin.AdminClient;
@@ -59,6 +60,8 @@ public class KafkaOrchestrator {
         createTopic("payment_response", 1);
         createTopic("order_request", 1);
         createTopic("order_response", 1);
+        createTopic("reservation_request", 1);
+        createTopic("reservation_response", 1);
     }
 
     /**
@@ -95,16 +98,25 @@ public class KafkaOrchestrator {
     private Topology buildTopology() {
         final StreamsBuilder builder = new StreamsBuilder();
         // Get Order and send to Payment
-        KStream<String, OrderRequest> orderRequestStream = getOrderRequestStream(builder);
-        sendPaymentRequest(orderRequestStream);
+        KStream<String, OrderCreatedEvent> orderRequestStream = getPendingOrders(builder);
+        requestRoomReservation(orderRequestStream);
+        //sendPaymentRequest(orderRequestStream);
 
         // Get Payment response and send to Order
-        KStream<String, PaymentResponse> paymentResponseStream = getPaymentResponseStream(builder);
-        sendOrderResponse(paymentResponseStream);
+        //KStream<String, PaymentResponse> paymentResponseStream = getPaymentResponseStream(builder);
+        //sendOrderResponse(paymentResponseStream);
 
         final Topology topology = builder.build();
         System.out.println(topology.describe());
         return topology;
+    }
+
+    private void requestRoomReservation(KStream<String, OrderCreatedEvent> orderCreatedStream){
+        KStream<String, ReservationCommand> reservationRequesStream = orderCreatedStream.mapValues((value) -> {
+            return new ReservationCommand(String.valueOf(value.getId()), null, ReservationCommand.ReservationRequest.RESERVE);
+        });
+        reservationRequesStream.foreach((key, value) -> logger.info("Requesting a Room " + value));
+        reservationRequesStream.to("reservation_request", Produced.with(Serdes.String(), SerdesFactory.getSerde(ReservationCommand.class)));
     }
 
     private void sendOrderResponse(KStream<String, PaymentResponse> paymentResponseStream) {
@@ -134,7 +146,7 @@ public class KafkaOrchestrator {
         return paymentOutputStream;
     }
 
-    private KStream<String, PaymentRequest> sendPaymentRequest(KStream<String, OrderRequest> orderRequestStream) {
+    private KStream<String, PaymentRequest> sendPaymentRequest(KStream<String, OrderCreatedEvent> orderRequestStream) {
         KStream<String, PaymentRequest> paymentStream = orderRequestStream.mapValues((order) -> {
             return new PaymentRequest(1, String.valueOf(order.getId()), TransactionType.WITHDRAW, 30.0);
         });
@@ -145,11 +157,13 @@ public class KafkaOrchestrator {
         return paymentStream;
     }
 
-    private KStream<String, OrderRequest> getOrderRequestStream(StreamsBuilder builder) {
-        KStream<String, OrderRequest> orderInputStream = builder.stream("order_request",
-                Consumed.with(Serdes.String(), SerdesFactory.getSerde(OrderRequest.class)));
-        orderInputStream.filter((key, value) -> value != null)
-                .foreach((key, value) -> logger.info("Processing Order: " + value));
+    private KStream<String, OrderCreatedEvent> getPendingOrders(StreamsBuilder builder) {
+        KStream<String, OrderCreatedEvent> orderInputStream = builder.stream("order_request",
+                Consumed.with(Serdes.String(), SerdesFactory.getSerde(OrderCreatedEvent.class)));
+        orderInputStream
+                .filter((key, value) -> value != null)
+                .filter((key, value) -> value.getStatus() == com.sagademo.models.OrderCreatedEvent.OrderStatus.PENDING)
+                .foreach((key, value) -> logger.info("Processing pending Order: " + value));
         return orderInputStream;
     }
 

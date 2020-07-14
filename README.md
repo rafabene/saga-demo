@@ -10,6 +10,14 @@ You can input the [Insominia file](Insomnia.json) to POST a `new order` to <http
 
 The docker-compose file executes the following services
 
+- **mongodb** - Used to store `rooms` documents.
+
+    Port: 279017
+
+- **mongoexpres** - Mongo UI
+
+    Available at <http://localhost:8083/>
+
 - **mysql** - Used to store `order` and `payment` tables. 
     
     Port: 3306
@@ -28,7 +36,7 @@ The docker-compose file executes the following services
     
 - **payment** - Written in [`MicroProfile/Helidon`](https://helidon.io/), Receive `payment` requests and process `payment`responses.
 
-    Port: 8081
+    Port: 8082
 
 - **orchestrator** - Written in [`Kafka Streams`](https://kafka.apache.org/25/documentation/streams/). Coordinate the calls between the Kafka Topics from different services.
 

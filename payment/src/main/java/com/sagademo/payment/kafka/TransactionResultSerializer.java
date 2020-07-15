@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
-import com.sagademo.payment.Transaction;
 import com.sagademo.payment.TransactionResult;
 
 import org.apache.kafka.common.serialization.Serializer;

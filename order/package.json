@@ -26,6 +26,7 @@
     "kafka-node": "^5.0.0",
     "knex": "^0.21.1",
     "mysql2": "^2.1.0",
+    "omit-empty": "^1.0.0",
     "tarn": "^3.0.0"
   },
   "devDependencies": {

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sagademo</groupId>
-	<artifactId>hotel</artifactId>
+	<artifactId>booking</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Hotel Service</name>
+	<name>Booking Service</name>
 	<description>Saga Demo: Booking</description>
 
 	<properties>

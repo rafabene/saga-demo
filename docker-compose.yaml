@@ -7,9 +7,11 @@ services:
         environment: 
           - MONGO_INITDB_ROOT_USERNAME=myuser
           - MONGO_INITDB_ROOT_PASSWORD=mypassword
-          - MONGO_INITDB_DATABASE=payment
+          - MONGO_INITDB_DATABASE=booking
     mongoexpress:
-        image: mongo-express
+        build:
+            context: .
+            dockerfile: Dockerfile.mongoexpress
         ports:
             - "8083:8081"
         depends_on: 
@@ -68,6 +70,20 @@ services:
             - DB_PASSWORD=mypassword
             - KAFKA_URL=kafka:9092
         command: ./wait-for-it.sh -t 0 mysql:3306 -- npm start
+    booking:
+        build:
+            context: "booking"
+        depends_on: 
+            - mongodb
+            - kafka
+        ports: 
+            - "8081:8081"
+        environment: 
+            - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+            - SPRING_DATA_MONGODB_HOST=mongodb
+            - SPRING_DATA_MONGODB_USERNAME=myuser
+            - SPRING_DATA_MONGODB_PASSWORD=mypassword
+            - SPRING_DATA_MONGODB_DATABASE=booking
     payment:
         build:
             context: "payment"
@@ -91,3 +107,4 @@ services:
             - payment
         environment: 
             - KAFKA_URL=kafka:9092
+

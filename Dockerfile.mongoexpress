@@ -1,0 +1,4 @@
+FROM mongo-express
+ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh .
+RUN chmod +x ./wait-for-it.sh
+CMD ./wait-for-it.sh -t 0 $ME_CONFIG_MONGODB_SERVER:27017 -- /docker-entrypoint.sh mongo-express

@@ -3,15 +3,14 @@ package com.sagademo.payment.kafka;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.persistence.NoResultException;
 
 import com.sagademo.payment.Transaction;
 import com.sagademo.payment.TransactionResult;
 import com.sagademo.payment.TransactionResult.ResultType;
-import com.sagademo.payment.entity.InsuficentBalanceException;
 import com.sagademo.payment.TransactionService;
+import com.sagademo.payment.entity.InsuficentBalanceException;
 
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -33,7 +32,6 @@ public class TransactionKafkaProcessor implements Runnable {
 
     private Properties properties = new Properties();
     private TransactionService transactionService;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
     private Consumer<String, Transaction> consumer;
     private Producer<String, TransactionResult> producer;
 

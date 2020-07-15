@@ -10,5 +10,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface RoomRepository extends MongoRepository<Room, Integer>{
 
     public List<Room> findByRoomSituation(RoomSituation roomSituation);
+
+    public List<Room> findByRoomSituationAndOrder(RoomSituation roomSituation, String order);
     
 }

@@ -4,23 +4,20 @@ public class ReservationCommand {
     
     private String order;
 
-    private Integer room;
-
     private ReservationRequest reservationRequest;
 
 
     public ReservationCommand() {
     }
 
-    public ReservationCommand(String order, Integer room, ReservationRequest reservationRequest) {
+    public ReservationCommand(String order, ReservationRequest reservationRequest) {
         this.order = order;
-        this.room = room;
         this.reservationRequest = reservationRequest;
         switch (reservationRequest) {
             case CANCEL:
             case CONFIRM:
-                if (room == null || order == null){
-                    throw new IllegalArgumentException(reservationRequest + " requires a room number and a order number");
+                if (order == null){
+                    throw new IllegalArgumentException(reservationRequest + " requires an order number");
                 }
                 break;
             default:
@@ -34,14 +31,6 @@ public class ReservationCommand {
 
     public void setOrder(String order) {
         this.order = order;
-    }
-
-    public Integer getRoom() {
-        return this.room;
-    }
-
-    public void setRoom(Integer room) {
-        this.room = room;
     }
 
     public ReservationRequest getReservationRequest() {
@@ -58,7 +47,6 @@ public class ReservationCommand {
     public String toString() {
         return "{" +
             " order='" + getOrder() + "'" +
-            ", room='" + getRoom() + "'" +
             ", reservationRequest='" + getReservationRequest() + "'" +
             "}";
     }

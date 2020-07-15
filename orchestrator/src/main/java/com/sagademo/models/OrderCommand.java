@@ -1,22 +1,22 @@
 package com.sagademo.models;
 
-public class OrderResponse {
+public class OrderCommand {
 
     private Long id;
 
-    private OrderStatus status;
+    private OrderRequest status;
 
     private String cause;
 
-    public OrderResponse() {
+    public OrderCommand() {
 
     }
 
-    public OrderResponse(Long id, OrderStatus status, String cause) {
+    public OrderCommand(Long id, OrderRequest status, String cause) {
         this.id = id;
         this.status = status;
-        if (status == OrderStatus.CANCELED && cause == null){
-            throw new IllegalArgumentException("Cause must be informed for status = " + OrderStatus.CANCELED);
+        if (status == OrderRequest.CANCEL && cause == null){
+            throw new IllegalArgumentException("Cause must be informed for status = " + OrderRequest.CANCEL);
         }
         this.cause = cause;
     }
@@ -29,11 +29,11 @@ public class OrderResponse {
         this.id = id;
     }
 
-    public OrderStatus getStatus() {
+    public OrderRequest getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(OrderRequest status) {
         this.status = status;
     }
 
@@ -45,8 +45,8 @@ public class OrderResponse {
         this.cause = cause;
     }
 
-    public static enum OrderStatus {
-        CONFIRMED, CANCELED
+    public static enum OrderRequest {
+        CONFIRM, CANCEL
     }
 
     @Override

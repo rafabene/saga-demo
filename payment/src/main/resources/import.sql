@@ -1,1 +1,1 @@
-INSERT INTO `balance` (`account_id`,`balance`) VALUES (1, 100.50);  
+INSERT INTO `balance` (`account_id`,`balance`) VALUES (1, 5000.00);  

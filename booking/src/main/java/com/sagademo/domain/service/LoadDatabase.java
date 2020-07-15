@@ -18,11 +18,13 @@ public class LoadDatabase {
     @Bean
     CommandLineRunner initDatabase(RoomRepository repository) {
         return args -> {
-            log.info("Preloading " + repository.save(new Room(100, null, 1000.0, RoomSituation.FREE)));
-            log.info("Preloading " + repository.save(new Room(200, null, 1000.0, RoomSituation.FREE)));
-            log.info("Preloading " + repository.save(new Room(300, null, 1000.0, RoomSituation.FREE)));
-            log.info("Preloading " + repository.save(new Room(400, null, 1000.0, RoomSituation.FREE)));
-            log.info("Preloading " + repository.save(new Room(500, null, 2000.0, RoomSituation.FREE)));
+            if (repository.findAll().size() == 0){
+                log.info("Preloading " + repository.save(new Room(100, null, 1000.0, RoomSituation.FREE)));
+                log.info("Preloading " + repository.save(new Room(200, null, 1000.0, RoomSituation.FREE)));
+                log.info("Preloading " + repository.save(new Room(300, null, 1000.0, RoomSituation.FREE)));
+                log.info("Preloading " + repository.save(new Room(400, null, 1000.0, RoomSituation.FREE)));
+                log.info("Preloading " + repository.save(new Room(500, null, 2000.0, RoomSituation.FREE)));
+            }
         };
     }
 

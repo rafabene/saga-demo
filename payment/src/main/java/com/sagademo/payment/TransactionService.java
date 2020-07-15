@@ -4,7 +4,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 
 import com.sagademo.payment.entity.Balance;
 import com.sagademo.payment.entity.BalanceRepository;

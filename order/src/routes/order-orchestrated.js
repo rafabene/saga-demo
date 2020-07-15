@@ -2,12 +2,13 @@ const express = require('express')
 const router = express.Router()
 const knex = require('../knex')
 const kafka = require('../kafka-processor')
+const omitEmpty = require('omit-empty')
 const DEFAULT_STATUS = 'PENDING'
 
 router.get('/', (req, res) => {
   knex.select().from('order')
-    .then((rows) => {
-      res.send(rows)
+    .then((result) => {
+      res.send(omitEmpty(result))
     })
 })
 

@@ -28,9 +28,11 @@ The docker-compose file executes the following services
 
 - **mongoexpres** - Mongo UI
 
+    Port: 8083
+    
     Available at <http://localhost:8083/>
 
-- **mysql** - Used to store `order` and `payment` tables. 
+- **mysql** - Used to store `order` and `balance` tables. 
     
     Port: 3306
 
@@ -42,11 +44,15 @@ The docker-compose file executes the following services
 
     Available at <http://localhost:9000/>
 
-- **order** - Written in [`NodeJS/ExpressJS`](https://expressjs.com/), Receive `order` requests and process `order`responses.
+- **order** - Written in [`NodeJS/ExpressJS`](https://expressjs.com/), Receive `order` requests and process `order` commands.
 
     Port: 8080
     
-- **payment** - Written in [`MicroProfile/Helidon`](https://helidon.io/), Receive `payment` requests and process `payment`responses.
+- **booking** - Written in [`Spring Boot`](https://spring.io/projects/spring-boot), Process `reservation` requests.
+
+    Port: 8081
+
+- **payment** - Written in [`MicroProfile/Helidon`](https://helidon.io/), Process `payment` requests.
 
     Port: 8082
 

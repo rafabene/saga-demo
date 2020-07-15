@@ -1,5 +1,7 @@
 # Saga Demo
 
+Slides are available at <http://bit.ly/sagakafka>
+
 To Execute this project, clone the repository, `cd` into it, and execute:
 
     docker-compose up
@@ -11,6 +13,10 @@ You can download Insominia from <https://insomnia.rest/download/core/>
 If you have Insominia installed, just click on the button bellow:
 
 [![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Saga%20Demo&uri=https%3A%2F%2Fraw.githubusercontent.com%2Frafabene%2Fsaga-demo%2Fmaster%2FInsomnia.json)
+
+## Overall Architecture
+
+![alt](architecture.png)
 
 ## Services information
 
